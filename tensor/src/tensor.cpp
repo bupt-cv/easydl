@@ -3,6 +3,7 @@
  * Email: xuzhenqi1993@gmail.com
  */
 
+#include <vector>
 #include "util/include/util.h"
 #include "tensor/include/tensor.h"
 #include "util/include/common.h"

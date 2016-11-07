@@ -29,7 +29,7 @@ using std::vector;
 //   return std::vector<size_t>(PyArray_DIMS(data),
 //       PyArray_DIMS(data) + PyArray_NDIM(data));
 // }
-// 
+//
 // // get data_type of numpy object
 // inline std::string get_type(bp::object bparr) {
 //   PyArrayObject* arr = reinterpret_cast<PyArrayObject*>(bparr.ptr());
@@ -91,16 +91,17 @@ template void dump_matrix<float>(std::string, const Tensor<float>*);
 //   matrix->fill(reinterpret_cast<T*>(PyArray_DATA(data_arr)));
 //   return;
 // }
-// 
+//
 // template void nparray_to_matrix<int>(bp::object arr, Tensor<int>* matrix);
-// template void nparray_to_matrix<float>(bp::object arr, Tensor<float>* matrix);
+// template void nparray_to_matrix<float>(bp::object arr,
+//      Tensor<float>* matrix);
 
 class Index {
  public:
-  Index(const vector<size_t>& stride): stride_(stride) {
+  explicit Index(const vector<size_t>& stride): stride_(stride) {
     stride_.resize(4, 1);
   }
-  // TODO: rewrite to get a more general index
+  // TODO(xuzhenqi): rewrite to get a more general index
   size_t operator()(int i0 = 0, int i1 = 0, int i2 = 0, int i3 = 0) {
     return ((i0 * stride_[1] + i1) * stride_[2] + i2) * stride_[3] + i3;
   }

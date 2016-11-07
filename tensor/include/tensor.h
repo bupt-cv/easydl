@@ -20,7 +20,7 @@ class Tensor {
   typedef T Datatype;
   Tensor(): inflate_ratio_(2), capacity_(0), data_(NULL) {}
   virtual ~Tensor() {}
-  
+
   virtual inline std::string type() const { return "Tensor"; }
   // reshape will call different version of reserve
   void reshape(const std::vector<size_t>& shape, bool check = true);
@@ -61,7 +61,7 @@ class CPUTensor : public Tensor<T> {
   explicit CPUTensor(const std::vector<size_t>& shape);
   virtual ~CPUTensor();
 
-  virtual inline std::string type() const { return "CPUTensor"; } 
+  virtual inline std::string type() const { return "CPUTensor"; }
   virtual void reserve(const size_t s);
   virtual void fill(const T* src);
   virtual void fill_to(T* dst) const;
@@ -74,7 +74,7 @@ class GPUTensor : public Tensor<T> {
   explicit GPUTensor(const std::vector<size_t>& shape);
   virtual ~GPUTensor();
 
-  virtual inline std::string type() const { return "GPUTensor"; } 
+  virtual inline std::string type() const { return "GPUTensor"; }
   virtual void reserve(const size_t s);
   virtual void fill(const T* src);
   virtual void fill_to(T* dst) const;

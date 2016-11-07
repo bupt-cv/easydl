@@ -1,3 +1,10 @@
+/* Copyright(c). All Rights Reserved
+ * Author: Xu Zhenqi
+ * Email: xuzhenqi1993@gmail.com
+ */
+
+#include <memory>
+#include <vector>
 #include "gtest/gtest.h"
 #include "glog/logging.h"
 #include "util/include/math_functions.h"
@@ -8,21 +15,25 @@ namespace easydl {
 template <typename T>
 class TestAddOp : public ::testing::Test {
   typedef std::shared_ptr<Tensor<T>> TensorPtr;
+
  protected:
   virtual void SetUp() {
     vector<size_t> shape = {2, 3, 4};
-    cin0_.reset(new CPUTensor<T>(shape)); 
-    cin1_.reset(new CPUTensor<T>(shape)); 
-    cin2_.reset(new CPUTensor<T>(shape)); 
-    cout_.reset(new CPUTensor<T>(shape)); 
-    gin0_.reset(new GPUTensor<T>(shape)); 
-    gin1_.reset(new GPUTensor<T>(shape)); 
-    gin2_.reset(new GPUTensor<T>(shape)); 
-    gout_.reset(new GPUTensor<T>(shape)); 
-    
-    gaussian(int(cin0_->size()), T(2), T(3), cin0_->data_mutable());
-    gaussian(int(cin1_->size()), T(2), T(3), cin1_->data_mutable());
-    gaussian(int(cin2_->size()), T(2), T(3), cin2_->data_mutable());
+    cin0_.reset(new CPUTensor<T>(shape));
+    cin1_.reset(new CPUTensor<T>(shape));
+    cin2_.reset(new CPUTensor<T>(shape));
+    cout_.reset(new CPUTensor<T>(shape));
+    gin0_.reset(new GPUTensor<T>(shape));
+    gin1_.reset(new GPUTensor<T>(shape));
+    gin2_.reset(new GPUTensor<T>(shape));
+    gout_.reset(new GPUTensor<T>(shape));
+
+    gaussian(static_cast<int>(cin0_->size()), static_cast<T>(2),
+             static_cast<T>(3), cin0_->data_mutable());
+    gaussian(static_cast<int>(cin1_->size()), static_cast<T>(2),
+             static_cast<T>(3), cin1_->data_mutable());
+    gaussian(static_cast<int>(cin2_->size()), static_cast<T>(2),
+             static_cast<T>(3), cin2_->data_mutable());
     gin0_->fill(cin0_->data());
     gin1_->fill(cin1_->data());
     gin2_->fill(cin2_->data());
@@ -32,7 +43,7 @@ class TestAddOp : public ::testing::Test {
   }
 
   TensorPtr cin0_, cin1_, cin2_, cout_;
-  TensorPtr gin0_, gin1_, gin2_, gout_; 
+  TensorPtr gin0_, gin1_, gin2_, gout_;
   vector<TensorPtr> cvtp_, gvtp_;
   CPUAddOp<T> cop_;
   GPUAddOp<T> gop_;
@@ -57,13 +68,13 @@ TYPED_TEST(TestAddOp, reshape) {
   this->cop_.reshape(this->cvtp_);
   this->gop_.reshape(this->gvtp_);
   EXPECT_EQ(this->cout_->shape().size(), 3);
-  EXPECT_EQ(this->cout_->shape()[0], 2); 
-  EXPECT_EQ(this->cout_->shape()[1], 3); 
-  EXPECT_EQ(this->cout_->shape()[2], 4); 
+  EXPECT_EQ(this->cout_->shape()[0], 2);
+  EXPECT_EQ(this->cout_->shape()[1], 3);
+  EXPECT_EQ(this->cout_->shape()[2], 4);
   EXPECT_EQ(this->gout_->shape().size(), 3);
-  EXPECT_EQ(this->gout_->shape()[0], 2); 
-  EXPECT_EQ(this->gout_->shape()[1], 3); 
-  EXPECT_EQ(this->gout_->shape()[2], 4); 
+  EXPECT_EQ(this->gout_->shape()[0], 2);
+  EXPECT_EQ(this->gout_->shape()[1], 3);
+  EXPECT_EQ(this->gout_->shape()[2], 4);
 }
 
 TYPED_TEST(TestAddOp, equal) {

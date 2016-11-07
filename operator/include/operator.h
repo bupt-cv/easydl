@@ -17,12 +17,12 @@ using std::vector;
 
 template <typename T>
 class Operator {
- public: 
+ public:
   typedef std::shared_ptr<Tensor<T>> TensorPtr;
-  virtual void operator()(vector<TensorPtr>&) {} 
+  virtual void operator()(const vector<TensorPtr>&) {}
  protected:
   virtual bool check(const vector<TensorPtr>&) {}
-  virtual void reshape(vector<TensorPtr>&) {}
+  virtual void reshape(const vector<TensorPtr>&) {}
 };
 
 template <typename T>
@@ -46,8 +46,8 @@ class CPUOperator : public Operator<T> {
     bool flag = true;
     for (size_t i = 0; i < ts.size(); ++i) {
       flag &= (ts[i]->type() == "CPUTensor");
-    }      
-    return flag; 
+    }
+    return flag;
   }
 };
 

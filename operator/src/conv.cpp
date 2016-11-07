@@ -3,6 +3,7 @@
  * Email: xuzhenqi1993@gmail.com
  */
 
+#include <vector>
 #include "operator/include/conv.h"
 #include "util/include/util.h"
 #include "util/include/common.h"
@@ -17,7 +18,7 @@ bool CPUConvOp<T>::check(const vector<TensorPtr>& ts) {
 }
 
 template <typename T>
-void CPUConvOp<T>::reshape(vector<TensorPtr>& ts) {
+void CPUConvOp<T>::reshape(const vector<TensorPtr>& ts) {
   vector<size_t> in_shape = ts[0]->shape();
   CHECK_EQ(in_shape.size(), 4);
   vector<size_t> weight_shape = {in_shape[1], size_t(param_.output_channel_),
@@ -26,17 +27,17 @@ void CPUConvOp<T>::reshape(vector<TensorPtr>& ts) {
   int out_height = (in_shape[2] + 2 * param_.padding_ + 1 -
                    param_.kernel_size_) / param_.stride_;
   int out_width = (in_shape[3] + 2 * param_.padding_ + 1 -
-                   param_.kernel_size_) / param_.stride_; 
+                   param_.kernel_size_) / param_.stride_;
   vector<size_t> out_shape = {in_shape[0], size_t(param_.output_channel_),
     size_t(out_height), size_t(out_width)};
   ts[2]->reshape(out_shape);
 }
 
 
-// TODO: This implementation is totally inefficient, and can be used
+// TODO(xuzhenqi): This implementation is totally inefficient, and can be used
 // as test utility later.
 template <typename T>
-void CPUConvOp<T>::operator()(vector<TensorPtr>& ts) {
+void CPUConvOp<T>::operator()(const vector<TensorPtr>& ts) {
   const T* in = ts[0]->data();
   const T* weight = ts[1]->data();
   T* out = ts[2]->data_mutable();
@@ -55,8 +56,9 @@ void CPUConvOp<T>::operator()(vector<TensorPtr>& ts) {
               for (size_t n = 0; n < size_t(param_.kernel_size_); ++n) {
                 int in_height = l + m - param_.padding_;
                 int in_width = o + n - param_.padding_;
-                if (in_height >= 0 && in_height < int(in_shape[2])
-                    && in_width >= 0 && in_width < int(in_shape[3])) {
+                if (in_height >= 0 && in_height < static_cast<int>(in_shape[2])
+                    && in_width >= 0 && in_width
+                    < static_cast<int>(in_shape[3])) {
                   out[out_index(i, k, l, o)] =
                       in[in_index(i, j, l + m, o + n)] *
                       weight[weight_index(j, k, m, n)];

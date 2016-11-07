@@ -6,6 +6,8 @@
 #ifndef OPERATOR_INCLUDE_CONV_H_
 #define OPERATOR_INCLUDE_CONV_H_
 
+#include <memory>
+#include <vector>
 #include "operator/include/operator.h"
 
 namespace easydl {
@@ -24,10 +26,10 @@ template <typename T>
 class CPUConvOp : public CPUOperator<T> {
   typedef std::shared_ptr<Tensor<T>> TensorPtr;
  public:
-  CPUConvOp(const ConvOpParam& param): param_(param) {}
-  virtual void operator()(vector<TensorPtr>&);
+  explicit CPUConvOp(const ConvOpParam& param): param_(param) {}
+  virtual void operator()(const vector<TensorPtr>&);
   virtual bool check(const vector<TensorPtr>&);
-  virtual void reshape(vector<TensorPtr>&); 
+  virtual void reshape(const vector<TensorPtr>&);
  private:
   ConvOpParam param_;
 };

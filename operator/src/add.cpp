@@ -4,6 +4,7 @@
  */
 
 #include <iostream>
+#include <vector>
 #include "operator/include/add.h"
 #include "util/include/math_functions.h"
 #include "util/include/common.h"
@@ -15,11 +16,11 @@ template <typename T>
 bool CPUAddOp<T>::check(const vector<TensorPtr>& ts) {
   bool flag = CPUOperator<T>::check(ts);
   flag &= (ts.size() >= 3);
-  return flag; 
+  return flag;
 }
 
 template <typename T>
-void CPUAddOp<T>::reshape(vector<TensorPtr>& ts) {
+void CPUAddOp<T>::reshape(const vector<TensorPtr>& ts) {
   for (size_t i = 1; i < ts.size() - 1; ++i) {
     CHECK_EQ(ts[i]->size(), ts[0]->size());
   }
@@ -27,7 +28,7 @@ void CPUAddOp<T>::reshape(vector<TensorPtr>& ts) {
 }
 
 template <typename T>
-void CPUAddOp<T>::operator()(vector<TensorPtr>& ts) {
+void CPUAddOp<T>::operator()(const vector<TensorPtr>& ts) {
   T* out = ts.back()->data_mutable();
   memset(out, 0, sizeof(T) * ts.back()->size());
   for (size_t i = 0; i < ts.size() - 1; ++i) {
@@ -42,11 +43,11 @@ template <typename T>
 bool GPUAddOp<T>::check(const vector<TensorPtr>& ts) {
   bool flag = GPUOperator<T>::check(ts);
   flag &= (ts.size() >= 3);
-  return flag; 
+  return flag;
 }
 
 template <typename T>
-void GPUAddOp<T>::reshape(vector<TensorPtr>& ts) {
+void GPUAddOp<T>::reshape(const vector<TensorPtr>& ts) {
   for (size_t i = 1; i < ts.size() - 1; ++i) {
     CHECK_EQ(ts[i]->size(), ts[0]->size());
   }
@@ -54,7 +55,7 @@ void GPUAddOp<T>::reshape(vector<TensorPtr>& ts) {
 }
 
 template <typename T>
-void GPUAddOp<T>::operator()(vector<TensorPtr>& ts) {
+void GPUAddOp<T>::operator()(const vector<TensorPtr>& ts) {
   T* out = ts.back()->data_mutable();
   gpuset(out, 0, ts.back()->size());
   for (size_t i = 0; i < ts.size() - 1; ++i) {

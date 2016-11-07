@@ -10,14 +10,14 @@ namespace easydl {
 
 template <typename T>
 void gpuset(T* dst, char ch, size_t size) {
-  CUDA_CHECK(cudaMemset(dst, ch, size * sizeof(T))); 
+  CUDA_CHECK(cudaMemset(dst, ch, size * sizeof(T)));
 }
 
 template void gpuset<float>(float*, char, size_t);
 template void gpuset<double>(double*, char, size_t);
 
 template <typename T>
-__global__ void add_kernel(const int n, const T* d0, const T* d1, T* out){
+__global__ void add_kernel(const int n, const T* d0, const T* d1, T* out) {
   CUDA_KERNEL_LOOP(i, n) {
     out[i] = d0[i] + d1[i];
   }
@@ -33,4 +33,4 @@ void gpuadd(const int n, const T* d0, const T* d1, T* out) {
 template void gpuadd<float>(const int, const float*, const float*, float*);
 template void gpuadd<double>(const int, const double*, const double*, double*);
 
-}
+}  // namespace easydl
