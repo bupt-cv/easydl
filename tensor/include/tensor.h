@@ -21,7 +21,7 @@ class Tensor {
   Tensor(): inflate_ratio_(2), capacity_(0), data_(NULL) {}
   virtual ~Tensor() {}
   
-  virtual inline std::string type() { return "Tensor"; }
+  virtual inline std::string type() const { return "Tensor"; }
   // reshape will call different version of reserve
   void reshape(const std::vector<size_t>& shape, bool check = true);
   // reserve guarantees capacity >= shape,

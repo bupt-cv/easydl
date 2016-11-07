@@ -1,4 +1,5 @@
 #include "gtest/gtest.h"
+#include "glog/logging.h"
 #include "util/include/math_functions.h"
 #include "operator/include/add.h"
 
@@ -68,6 +69,8 @@ TYPED_TEST(TestAddOp, reshape) {
 TYPED_TEST(TestAddOp, equal) {
   this->cop_.reshape(this->cvtp_);
   this->cop_(this->cvtp_);
+  this->cop_(this->cvtp_);
+  this->cop_(this->cvtp_);
   this->gop_.reshape(this->gvtp_);
   this->gop_(this->gvtp_);
   CPUTensor<TypeParam> temp(this->gout_->shape());
@@ -80,6 +83,9 @@ TYPED_TEST(TestAddOp, equal) {
 }  // namespace easydl
 
 int main(int argc, char** argv) {
+  FLAGS_alsologtostderr = true;
+  ::google::InstallFailureSignalHandler();
+  ::google::InitGoogleLogging(argv[0]);
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }

@@ -6,6 +6,7 @@
 #ifndef OPERATOR_INCLUDE_OPERATOR_H_
 #define OPERATOR_INCLUDE_OPERATOR_H_
 
+#include <iostream>
 #include <memory>
 #include <vector>
 #include "tensor/include/tensor.h"

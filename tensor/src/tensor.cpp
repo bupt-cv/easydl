@@ -14,19 +14,19 @@ namespace easydl {
 // when check is false, call reserve()
 template <typename T>
 void Tensor<T>::reshape(const std::vector<size_t>& shape, bool check) {
-    size_t shape_size = 1;
-    for (size_t i = 0; i < shape.size(); ++i) {
-      shape_size *= shape[i];
-    }
-    if (check) {
-      if (shape_size != this->size()) {
-        LOG(FATAL) << "shape size mismatch. current shape: "
+  size_t shape_size = 1;
+  for (size_t i = 0; i < shape.size(); ++i) {
+    shape_size *= shape[i];
+  }
+  if (check) {
+    if (shape_size != this->size()) {
+      LOG(FATAL) << "shape size mismatch. current shape: "
           << shape_string(shape_) << "input shape: " << shape_string(shape);
-      }
-    } else {
-      reserve(shape_size);
     }
-    shape_ = shape;  // deep copy
+  } else {
+    reserve(shape_size);
+  }
+  shape_ = shape;  // deep copy
 }
 
 template <typename T>
@@ -84,14 +84,14 @@ void CPUTensor<T>::fill_to(T* dst) const {
 // Implementation of GPUTensor
 template <typename T>
 GPUTensor<T>::GPUTensor(const std::vector<size_t>& shape) {
-    this->shape_ = shape;
-    this->capacity_ = 0;
-    this->data_ = NULL;
-    size_t s = this->size() * this->inflate_ratio_;
-    if (s > 0) {
-      CUDA_CHECK(cudaMalloc(&this->data_, s * sizeof(T)));
-      this->capacity_ = s;
-    }
+  this->shape_ = shape;
+  this->capacity_ = 0;
+  this->data_ = NULL;
+  size_t s = this->size() * this->inflate_ratio_;
+  if (s > 0) {
+    CUDA_CHECK(cudaMalloc(&this->data_, s * sizeof(T)));
+    this->capacity_ = s;
+  }
 }
 
 template <typename T>
@@ -113,13 +113,13 @@ void GPUTensor<T>::reserve(size_t s) {
 template <typename T>
 void GPUTensor<T>::fill(const T* src) {
   CUDA_CHECK(cudaMemcpy(this->data_, src, this->size() * sizeof(T),
-      cudaMemcpyHostToDevice));
+                        cudaMemcpyHostToDevice));
 }
 
 template <typename T>
 void GPUTensor<T>::fill_to(T* dst) const {
   CUDA_CHECK(cudaMemcpy(dst, this->data_, this->size() * sizeof(T),
-      cudaMemcpyDeviceToHost));
+                        cudaMemcpyDeviceToHost));
 }
 
 INSTANTIATE_CLASS(Tensor);
