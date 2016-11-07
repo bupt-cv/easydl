@@ -8,8 +8,9 @@
 
 #include <cuda.h>
 #include <cuda_runtime.h>
-#include <cublas_v2.h>
+
 #include <curand.h>
+#include <cublas_v2.h>
 #include <driver_types.h>  // cuda driver types
 
 #include <memory>
@@ -50,8 +51,6 @@
 
 // CUDA: check for error after kernel execution and exit loudly if there is one.
 #define CUDA_POST_KERNEL_CHECK CUDA_CHECK(cudaPeekAtLastError())
-
-
 
 namespace easydl {
 

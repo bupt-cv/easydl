@@ -11,6 +11,7 @@ INCLUDE_DIRECTORIES(
 	${CUDA_TOOLKIT_ROOT_DIR}/include/
 	/usr/local/include
 	/usr/include
+    ${PROJECT_SOURCE_DIR}/third_party/googletest/googletest/include
 	)
 
 # lib directories
@@ -20,6 +21,7 @@ LINK_DIRECTORIES(
 	/usr/local/lib
 	/usr/lib
 	/usr/lib64
+    ${PROJECT_SOURCE_DIR}/third_party/googletest/build/googlemock/gtest
 	)
 
 # for link
@@ -30,16 +32,20 @@ set(SYSLIB
 	cublas
 	cudart
 	curand
+    gtest
 	)
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
-set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} -Xcompiler -fPIC -gencode=arch=compute_20,code=\"sm_20,compute_20\" -gencode=arch=compute_30,code=\"sm_30,compute_30\" -gencode=arch=compute_35,code=\"sm_35,compute_35\" -gencode=arch=compute_50,code=\"sm_50,compute_50\"")
+message("CUDA_COMPILE_CUBIN:${CUDA_COMPILE_CUBIN}")
+
+set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} -std=c++11 -Xcompiler -fPIC -gencode=arch=compute_30,code=\"sm_30,compute_30\" -gencode=arch=compute_35,code=\"sm_35,compute_35\" -gencode=arch=compute_50,code=\"sm_50,compute_50\"")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fopenmp -fPIC")
 
 ADD_SUBDIRECTORY(util)
 ADD_SUBDIRECTORY(tensor)
+ADD_SUBDIRECTORY(operator)
 
 ENABLE_TESTING()
 #ADD_TEST(test_singleton ${PROJECT_BINARY_DIR}/bin/test_singleton)

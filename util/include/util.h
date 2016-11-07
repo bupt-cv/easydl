@@ -23,6 +23,7 @@
 
 namespace easydl {
 
+using std::vector;
 // return numpy shape as vector
 // inline std::vector<size_t> get_array_shape(PyArrayObject* data) {
 //   return std::vector<size_t>(PyArray_DIMS(data),
@@ -39,7 +40,7 @@ namespace easydl {
 // format shape string
 inline std::string shape_string(const std::vector<size_t>& shape) {
   std::ostringstream stream;
-  for (int i = 0; i < shape.size(); ++i) {
+  for (size_t i = 0; i < shape.size(); ++i) {
     stream << shape[i] << " ";
   }
   return stream.str();
@@ -64,7 +65,7 @@ void dump_matrix(std::string filename, const Tensor<T>* m) {
   std::vector<T> temp(m->size());
   m->fill_to(temp.data());
 
-  for (int i = 0; i < shape.size(); ++i) {
+  for (size_t i = 0; i < shape.size(); ++i) {
     of << shape[i] << " ";
   }
   of << std::endl << row << " " << col << std::endl;
@@ -93,6 +94,19 @@ template void dump_matrix<float>(std::string, const Tensor<float>*);
 // 
 // template void nparray_to_matrix<int>(bp::object arr, Tensor<int>* matrix);
 // template void nparray_to_matrix<float>(bp::object arr, Tensor<float>* matrix);
+
+class Index {
+ public:
+  Index(const vector<size_t>& stride): stride_(stride) {
+    stride_.resize(4, 1);
+  }
+  // TODO: rewrite to get a more general index
+  size_t operator()(int i0 = 0, int i1 = 0, int i2 = 0, int i3 = 0) {
+    return ((i0 * stride_[1] + i1) * stride_[2] + i2) * stride_[3] + i3;
+  }
+ private:
+  vector<size_t> stride_;
+};
 
 }  // namespace easydl
 

@@ -5,6 +5,7 @@
 
 #include "util/include/util.h"
 #include "tensor/include/tensor.h"
+#include "util/include/common.h"
 
 namespace easydl {
 
@@ -121,13 +122,8 @@ void GPUTensor<T>::fill_to(T* dst) const {
       cudaMemcpyDeviceToHost));
 }
 
-template class Tensor<float>;
-template class Tensor<int>;
-
-template class CPUTensor<float>;
-template class CPUTensor<int>;
-
-template class GPUTensor<float>;
-template class GPUTensor<int>;
+INSTANTIATE_CLASS(Tensor);
+INSTANTIATE_CLASS(GPUTensor);
+INSTANTIATE_CLASS(CPUTensor);
 
 }  // namespace easydl
