@@ -19,17 +19,17 @@ bool CPUConvOp<T>::check(const vector<TensorPtr>& ts) {
 
 template <typename T>
 void CPUConvOp<T>::reshape(const vector<TensorPtr>& ts) {
-  vector<size_t> in_shape = ts[0]->shape();
+  vector<int> in_shape = ts[0]->shape();
   CHECK_EQ(in_shape.size(), 4);
-  vector<size_t> weight_shape = {in_shape[1], size_t(param_.output_channel_),
-    size_t(param_.kernel_size_), size_t(param_.kernel_size_)};
+  vector<int> weight_shape = {in_shape[1], int(param_.output_channel_),
+    int(param_.kernel_size_), int(param_.kernel_size_)};
   ts[1]->reshape(weight_shape);
   int out_height = (in_shape[2] + 2 * param_.padding_ + 1 -
                    param_.kernel_size_) / param_.stride_;
   int out_width = (in_shape[3] + 2 * param_.padding_ + 1 -
                    param_.kernel_size_) / param_.stride_;
-  vector<size_t> out_shape = {in_shape[0], size_t(param_.output_channel_),
-    size_t(out_height), size_t(out_width)};
+  vector<int> out_shape = {in_shape[0], int(param_.output_channel_),
+    int(out_height), int(out_width)};
   ts[2]->reshape(out_shape);
 }
 
@@ -45,15 +45,15 @@ void CPUConvOp<T>::operator()(const vector<TensorPtr>& ts) {
   Index in_index(ts[0]->shape());
   Index weight_index(ts[1]->shape());
   Index out_index(ts[2]->shape());
-  const vector<size_t>& in_shape = ts[0]->shape();
-  const vector<size_t>& out_shape = ts[2]->shape();
-  for (size_t i = 0; i < in_shape[0]; ++i) {
-    for (size_t j = 0; j < in_shape[1]; ++j) {
-      for (size_t k = 0; k < size_t(param_.output_channel_); ++k) {
-        for (size_t l = 0; l < out_shape[2]; ++l) {
-          for (size_t o = 0; o < out_shape[3]; ++o) {
-            for (size_t m = 0; m < size_t(param_.kernel_size_); ++m) {
-              for (size_t n = 0; n < size_t(param_.kernel_size_); ++n) {
+  const vector<int>& in_shape = ts[0]->shape();
+  const vector<int>& out_shape = ts[2]->shape();
+  for (int i = 0; i < in_shape[0]; ++i) {
+    for (int j = 0; j < in_shape[1]; ++j) {
+      for (int k = 0; k < int(param_.output_channel_); ++k) {
+        for (int l = 0; l < out_shape[2]; ++l) {
+          for (int o = 0; o < out_shape[3]; ++o) {
+            for (int m = 0; m < int(param_.kernel_size_); ++m) {
+              for (int n = 0; n < int(param_.kernel_size_); ++n) {
                 int in_height = l + m - param_.padding_;
                 int in_width = o + n - param_.padding_;
                 if (in_height >= 0 && in_height < static_cast<int>(in_shape[2])

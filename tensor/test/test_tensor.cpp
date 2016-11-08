@@ -15,7 +15,7 @@ template <typename T>
 class TestTensor {
  public:
   void test_construction() {
-    vector<size_t> shape;
+    vector<int> shape;
     shape.push_back(5);
     shape.push_back(20);
     matrix_ = new T(shape);
@@ -29,7 +29,7 @@ class TestTensor {
   }
 
   void test_reshape() {
-    vector<size_t> shape;
+    vector<int> shape;
     shape.push_back(5);
     shape.push_back(20);
     matrix_ = new T(shape);
@@ -45,7 +45,7 @@ class TestTensor {
   }
 
   void test_reshape_small_no_check() {
-    vector<size_t> shape;
+    vector<int> shape;
     shape.push_back(5);
     shape.push_back(20);
     matrix_ = new T(shape);
@@ -61,7 +61,7 @@ class TestTensor {
   }
 
   void test_reshape_big_no_check() {
-    vector<size_t> shape = {10, 20};
+    vector<int> shape = {10, 20};
     matrix_ = new T(shape);
     shape[0] = 10;
     shape[1] = 200;

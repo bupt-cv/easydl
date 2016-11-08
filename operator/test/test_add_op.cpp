@@ -18,7 +18,7 @@ class TestAddOp : public ::testing::Test {
 
  protected:
   virtual void SetUp() {
-    vector<size_t> shape = {2, 3, 4};
+    vector<int> shape = {2, 3, 4};
     cin0_.reset(new CPUTensor<T>(shape));
     cin1_.reset(new CPUTensor<T>(shape));
     cin2_.reset(new CPUTensor<T>(shape));

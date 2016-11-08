@@ -14,8 +14,8 @@ namespace easydl {
 // when check is true, simply do elem count check
 // when check is false, call reserve()
 template <typename T>
-void Tensor<T>::reshape(const std::vector<size_t>& shape, bool check) {
-  size_t shape_size = 1;
+void Tensor<T>::reshape(const std::vector<int>& shape, bool check) {
+  int shape_size = 1;
   for (size_t i = 0; i < shape.size(); ++i) {
     shape_size *= shape[i];
   }
@@ -31,9 +31,9 @@ void Tensor<T>::reshape(const std::vector<size_t>& shape, bool check) {
 }
 
 template <typename T>
-size_t Tensor<T>::size() const {
+int Tensor<T>::size() const {
   if (shape_.empty()) return 0;
-  size_t shape_size = 1;
+  int shape_size = 1;
   for (size_t i = 0; i < shape_.size(); ++i) {
     shape_size *= shape_[i];
   }
@@ -42,11 +42,11 @@ size_t Tensor<T>::size() const {
 
 // Implementation of CPUTensor
 template <typename T>
-CPUTensor<T>::CPUTensor(const std::vector<size_t>& shape) {
+CPUTensor<T>::CPUTensor(const std::vector<int>& shape) {
   this->shape_ = shape;  // deep copy
   this->capacity_ = 0;
   this->data_ = NULL;
-  size_t s = this->size() * this->inflate_ratio_;
+  int s = this->size() * this->inflate_ratio_;
   if (s > 0) {
     this->data_ = reinterpret_cast<T*>(std::malloc(s * sizeof(T)));
     CHECK(this->data_) << "Allocation failed, size: " << s;
@@ -63,10 +63,10 @@ CPUTensor<T>::~CPUTensor() {
 }
 
 template <typename T>
-void CPUTensor<T>::reserve(const size_t s) {
+void CPUTensor<T>::reserve(const int s) {
   if (s > this->capacity_) {
     std::free(this->data_);
-    size_t new_s = s * this->inflate_ratio_;
+    int new_s = s * this->inflate_ratio_;
     this->data_ = reinterpret_cast<T*>(std::malloc(new_s * sizeof(T)));
     this->capacity_ = new_s;
   }
@@ -84,11 +84,11 @@ void CPUTensor<T>::fill_to(T* dst) const {
 
 // Implementation of GPUTensor
 template <typename T>
-GPUTensor<T>::GPUTensor(const std::vector<size_t>& shape) {
+GPUTensor<T>::GPUTensor(const std::vector<int>& shape) {
   this->shape_ = shape;
   this->capacity_ = 0;
   this->data_ = NULL;
-  size_t s = this->size() * this->inflate_ratio_;
+  int s = this->size() * this->inflate_ratio_;
   if (s > 0) {
     CUDA_CHECK(cudaMalloc(&this->data_, s * sizeof(T)));
     this->capacity_ = s;
@@ -103,10 +103,10 @@ GPUTensor<T>::~GPUTensor() {
 }
 
 template <typename T>
-void GPUTensor<T>::reserve(size_t s) {
+void GPUTensor<T>::reserve(int s) {
   if (s > this->capacity_) {
     CUDA_CHECK(cudaFree(this->data_));
-    size_t new_s = s * this->inflate_ratio_;
+    int new_s = s * this->inflate_ratio_;
     CUDA_CHECK(cudaMalloc(&this->data_, new_s * sizeof(T)));
     this->capacity_ = new_s;
   }

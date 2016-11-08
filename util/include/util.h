@@ -38,7 +38,7 @@ using std::vector;
 // }
 
 // format shape string
-inline std::string shape_string(const std::vector<size_t>& shape) {
+inline std::string shape_string(const std::vector<int>& shape) {
   std::ostringstream stream;
   for (size_t i = 0; i < shape.size(); ++i) {
     stream << shape[i] << " ";
@@ -59,7 +59,7 @@ inline size_t get_file_size(const std::string& path) {
 template <typename T>
 void dump_matrix(std::string filename, const Tensor<T>* m) {
   std::ofstream of(filename);
-  std::vector<size_t> shape = m->shape();
+  std::vector<int> shape = m->shape();
   int row = shape[0];
   int col = m->size() / row;
   std::vector<T> temp(m->size());
@@ -98,15 +98,15 @@ template void dump_matrix<float>(std::string, const Tensor<float>*);
 
 class Index {
  public:
-  explicit Index(const vector<size_t>& stride): stride_(stride) {
+  explicit Index(const vector<int>& stride): stride_(stride) {
     stride_.resize(4, 1);
   }
   // TODO(xuzhenqi): rewrite to get a more general index
-  size_t operator()(int i0 = 0, int i1 = 0, int i2 = 0, int i3 = 0) {
+  int operator()(int i0 = 0, int i1 = 0, int i2 = 0, int i3 = 0) {
     return ((i0 * stride_[1] + i1) * stride_[2] + i2) * stride_[3] + i3;
   }
  private:
-  vector<size_t> stride_;
+  vector<int> stride_;
 };
 
 }  // namespace easydl

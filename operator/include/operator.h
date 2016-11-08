@@ -20,7 +20,6 @@ class Operator {
  public:
   typedef std::shared_ptr<Tensor<T>> TensorPtr;
   virtual void operator()(const vector<TensorPtr>&) {}
- protected:
   virtual bool check(const vector<TensorPtr>&) {}
   virtual void reshape(const vector<TensorPtr>&) {}
 };
@@ -28,7 +27,7 @@ class Operator {
 template <typename T>
 class GPUOperator : public Operator<T> {
   typedef std::shared_ptr<Tensor<T>> TensorPtr;
- protected:
+ public:
   virtual bool check(const vector<TensorPtr>& ts) {
     bool flag = true;
     for (size_t i = 0; i < ts.size(); ++i) {
@@ -41,7 +40,7 @@ class GPUOperator : public Operator<T> {
 template <typename T>
 class CPUOperator : public Operator<T> {
   typedef std::shared_ptr<Tensor<T>> TensorPtr;
- protected:
+ public:
   virtual bool check(const vector<TensorPtr>& ts) {
     bool flag = true;
     for (size_t i = 0; i < ts.size(); ++i) {

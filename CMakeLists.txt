@@ -13,6 +13,7 @@ INCLUDE_DIRECTORIES(
 	${CUDA_TOOLKIT_ROOT_DIR}/include/
 	/usr/local/include
 	/usr/include
+    /usr/include/python2.7 
     ${PROJECT_SOURCE_DIR}/third_party/googletest/googletest/include
 	)
 
@@ -23,6 +24,7 @@ LINK_DIRECTORIES(
 	/usr/local/lib
 	/usr/lib
 	/usr/lib64
+    /usr/lib/python2.7/config-x86_64-linux-gnu
     ${PROJECT_SOURCE_DIR}/third_party/googletest/build/googlemock/gtest
 	)
 
@@ -35,6 +37,8 @@ set(SYSLIB
 	cudart
 	curand
     gtest
+    python2.7
+    boost_python
 	)
 
 add_custom_target(lint COMMAND ${CMAKE_COMMAND} -P ${PROJECT_SOURCE_DIR}/cmake/lint.cmake)
@@ -48,6 +52,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fopenmp -fPIC")
 ADD_SUBDIRECTORY(util)
 ADD_SUBDIRECTORY(tensor)
 ADD_SUBDIRECTORY(operator)
+ADD_SUBDIRECTORY(pywrapper)
 
 ENABLE_TESTING()
 #ADD_TEST(test_singleton ${PROJECT_BINARY_DIR}/bin/test_singleton)

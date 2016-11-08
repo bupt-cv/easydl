@@ -66,6 +66,7 @@ flags = [
 # project related
 '-I', '.',
 '-I', './third_party/googletest/googletest/include',
+'-I', '/usr/include/python2.7',
 '-isystem', '/usr/local/cuda-8.0/include',
 ]
 
