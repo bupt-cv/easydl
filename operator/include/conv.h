@@ -22,11 +22,31 @@ struct ConvOpParam {
   int kernel_size_, stride_, padding_, output_channel_;
 };
 
+// TODO(xuzhenqi): remove ConvOpParameter
 template <typename T>
 class CPUConvOp : public CPUOperator<T> {
   typedef std::shared_ptr<Tensor<T>> TensorPtr;
- public:
-  explicit CPUConvOp(const ConvOpParam& param): param_(param) {}
+ public: 
+  virtual inline std::string type() const { return "CPUConvOp"; }
+  // TODO(xuzhenqi): may change to use [], take "" as defaults
+  explicit CPUConvOp(const OperatorParameter& param): param_(-1) {
+    std::string value;
+    value = param.get("output_channel");
+    CHECK(!value.empty());
+    param_.output_channel_ = std::stoi(value);
+    value = param.get("kernel_size");
+    if (!value.empty()) {
+      param_.kernel_size_ = std::stoi(value);
+    }
+    value = param.get("stride");
+    if (!value.empty()) {
+      param_.stride_ = std::stoi(value);
+    }
+    value = param.get("padding");
+    if (!value.empty()) {
+      param_.padding_ = std::stoi(value);
+    }
+  }
   virtual void operator()(const vector<TensorPtr>&);
   virtual bool check(const vector<TensorPtr>&);
   virtual void reshape(const vector<TensorPtr>&);

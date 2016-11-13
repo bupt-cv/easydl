@@ -16,6 +16,8 @@ template <typename T>
 class CPUAddOp : public CPUOperator<T> {
   typedef std::shared_ptr<Tensor<T>> TensorPtr;
  public:
+  CPUAddOp(const OperatorParameter&) {}
+  virtual inline std::string type() const { return "CPUAddOp"; }
   virtual void operator()(const vector<TensorPtr>&);
   virtual bool check(const vector<TensorPtr>&);
   virtual void reshape(const vector<TensorPtr>&);
@@ -25,6 +27,8 @@ template <typename T>
 class GPUAddOp : public GPUOperator<T> {
   typedef std::shared_ptr<Tensor<T>> TensorPtr;
  public:
+  GPUAddOp(const OperatorParameter&) {}
+  virtual inline std::string type() const { return "GPUAddOp"; }
   virtual void operator()(const vector<TensorPtr>&);
   virtual bool check(const vector<TensorPtr>&);
   virtual void reshape(const vector<TensorPtr>&);

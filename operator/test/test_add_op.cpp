@@ -8,6 +8,7 @@
 #include "gtest/gtest.h"
 #include "glog/logging.h"
 #include "util/include/math_functions.h"
+#include "operator/include/operator.h"
 #include "operator/include/add.h"
 
 namespace easydl {
@@ -17,6 +18,7 @@ class TestAddOp : public ::testing::Test {
   typedef std::shared_ptr<Tensor<T>> TensorPtr;
 
  protected:
+  TestAddOp(): cop_(OperatorParameter()), gop_(OperatorParameter()) {}
   virtual void SetUp() {
     vector<int> shape = {2, 3, 4};
     cin0_.reset(new CPUTensor<T>(shape));

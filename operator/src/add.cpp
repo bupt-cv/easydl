@@ -33,7 +33,7 @@ void CPUAddOp<T>::operator()(const vector<TensorPtr>& ts) {
   memset(out, 0, sizeof(T) * ts.back()->size());
   for (size_t i = 0; i < ts.size() - 1; ++i) {
     const T* in = ts[i]->data();
-    for (size_t j = 0; j < ts[0]->size(); ++j) {
+    for (int j = 0; j < ts[0]->size(); ++j) {
       out[j] += in[j];
     }
   }
@@ -64,6 +64,8 @@ void GPUAddOp<T>::operator()(const vector<TensorPtr>& ts) {
 }
 
 INSTANTIATE_CLASS(GPUAddOp);
+REGISTER_OPERATOR_CLASS(GPUAddOp);
 INSTANTIATE_CLASS(CPUAddOp);
+REGISTER_OPERATOR_CLASS(CPUAddOp);
 
 }  // namespace easydl
